@@ -1,0 +1,25 @@
+sql = "select * from users"
+output = "csv"
+show_query = true
+
+[db]
+type = "mysql"
+host = "127.0.0.1"
+port = 3306
+user = "root"
+pass = "secret"
+name = "app"
+ssl_mode = "disable"
+dsn = ""
+
+[smtp]
+host = "smtp.example.com"
+port = 587
+user = "smtp-user"
+pass = "smtp-pass"
+from = "report@example.com"
+to = ["ops@example.com"]
+cc = []
+bcc = []
+subject = "SQL Report"
+tls = true
