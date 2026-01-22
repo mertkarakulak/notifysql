@@ -22,6 +22,8 @@ NotifySQL is a cron-friendly CLI that runs an SQL query and emails the result. I
 
 ## Install
 
+### macOS/Linux
+
 ```bash
 git clone https://github.com/mertkarakulak/notifysql.git
 cd notifysql
@@ -29,11 +31,29 @@ go mod tidy
 go build -o notifysql
 ```
 
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/mertkarakulak/notifysql.git
+cd notifysql
+go mod tidy
+go build -o notifysql.exe
+```
+
 ## Quick Start
+
+### macOS/Linux
 
 ```bash
 cp config.sample.toml config.toml
 ./notifysql -sql "select * from users"
+```
+
+### Windows (PowerShell)
+
+```powershell
+copy config.sample.toml config.toml
+.\notifysql.exe -sql "select * from users"
 ```
 
 ## Usage
@@ -52,9 +72,21 @@ cp config.sample.toml config.toml
 ./notifysql -test-mail
 ```
 
+### Windows (PowerShell) Example
+
+```powershell
+# Run a one-off query (uses config.toml for DB/SMTP)
+.\notifysql.exe -sql "select * from users" -output table
+
+# Override DB and SMTP using flags
+.\notifysql.exe -sql "select count(*) from orders" `
+  -db-type postgres -db-host 127.0.0.1 -db-user app -db-pass secret -db-name app `
+  -smtp-host smtp.example.com -smtp-port 587 -smtp-from report@example.com -smtp-to ops@example.com
+```
+
 ## Sample Config
 
-See `config.sample.toml` for a full configuration template (including `show_query`).
+See `config.sample.toml` for a full configuration template.
 
 ### Flags
 
@@ -83,6 +115,26 @@ See `config.sample.toml` for a full configuration template (including `show_quer
 - `-test-mail` Send test mail only
 - `-show-query` Include SQL query in email (`true`/`false`)
 - `-debug` Print SMTP dialogue and DB steps
+
+### Required vs Optional Flags
+
+Required means the value must be provided either by flags or in the config file.
+
+**Normal run (no `-test-db` / `-test-mail`)**
+- Required: `-sql`, `-db-type`, and either `-db-dsn` or (`-db-host`, `-db-user`, `-db-name`)
+- Required: `-smtp-host`, `-smtp-port`, `-smtp-from`, `-smtp-to`
+- Optional: `-db-port`, `-db-pass`, `-db-sslmode`, `-output`, `-smtp-user`, `-smtp-pass`, `-smtp-cc`, `-smtp-bcc`, `-smtp-subject`, `-smtp-tls`, `-show-query`, `-debug`
+
+**`-test-db`**
+- Required: `-db-type`, and either `-db-dsn` or (`-db-host`, `-db-user`, `-db-name`)
+- Optional: `-db-port`, `-db-pass`, `-db-sslmode`, `-debug`
+
+**`-test-mail`**
+- Required: `-smtp-host`, `-smtp-port`, `-smtp-from`, `-smtp-to`
+- Optional: `-smtp-user`, `-smtp-pass`, `-smtp-cc`, `-smtp-bcc`, `-smtp-subject`, `-smtp-tls`, `-debug`
+
+**Config file note**
+- `-config` is optional. If you pass it, the file must exist. If you do not pass it and `config.toml` is missing, the app still runs as long as required values are provided via flags.
 
 ## Output Formats
 
