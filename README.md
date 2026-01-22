@@ -23,7 +23,7 @@ NotifySQL is a cron-friendly CLI that runs an SQL query and emails the result. I
 ## Install
 
 ```bash
-git clone https://github.com/your-org/notifysql.git
+git clone https://github.com/mertkarakulak/notifysql.git
 cd notifysql
 go mod tidy
 go build -o notifysql
